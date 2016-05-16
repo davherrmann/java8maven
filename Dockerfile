@@ -20,5 +20,9 @@ VOLUME /volume/git
 RUN mkdir -p /local/git
 WORKDIR /local/git
 
+CMD echo "path"
+CMD echo $PATH
+CMD mvn -v
+
 # run terminal
 CMD ["/bin/bash"]
