@@ -3,26 +3,21 @@ FROM java:8
 MAINTAINER David Herrmann <davherrmann@gmail.com>
 
 # install maven
-RUN wget http://ftp.fau.de/apache/maven/maven-3/3.3.1/binaries/apache-maven-3.3.1-bin.tar.gz
-RUN tar -zxvf apache-maven-3.3.1-bin.tar.gz
-RUN rm apache-maven-3.3.1-bin.tar.gz
-RUN mv apache-maven-3.3.1 /usr/lib/mvn
+ENV MAVEN_VERSION 3.3.9
+ENV M2_HOME "/usr/local/apache-maven/apache-maven-${MAVEN_VERSION}"
+RUN wget --quiet "http://mirror.dkd.de/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && \
+  mkdir -p /usr/local/apache-maven && \
+  mv "apache-maven-${MAVEN_VERSION}-bin.tar.gz" /usr/local/apache-maven && \
+  tar xzvf "/usr/local/apache-maven/apache-maven-${MAVEN_VERSION}-bin.tar.gz" -C /usr/local/apache-maven/ && \
+  update-alternatives --install /usr/bin/mvn mvn "${M2_HOME}/bin/mvn" 1 && \
+  update-alternatives --config mvn
 
-# set environment variables
-ENV M2_HOME=/usr/lib/mvn
-ENV M2=$M2_HOME/bin
-ENV PATH $PATH:$M2_HOME:$M2
+# set maven opts
+ENV MAVEN_OPTS "-Xms512m -Xmx2g"
 
 # attach volumes
-VOLUME /volume/git
+VOLUME /volume/ws
 
 # create working directory
-RUN mkdir -p /local/git
-WORKDIR /local/git
-
-CMD echo "path"
-CMD echo $PATH
-CMD mvn -v
-
-# run terminal
-CMD ["/bin/bash"]
+RUN mkdir -p /local/ws
+WORKDIR /local/ws
