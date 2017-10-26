@@ -3,7 +3,7 @@ FROM java:8
 MAINTAINER David Herrmann <davherrmann@gmail.com>
 
 # install maven
-ENV MAVEN_VERSION 3.3.9
+ENV MAVEN_VERSION 3.5.2
 ENV M2_HOME "/usr/local/apache-maven/apache-maven-${MAVEN_VERSION}"
 RUN wget --quiet "http://mirror.dkd.de/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" && \
   mkdir -p /usr/local/apache-maven && \
